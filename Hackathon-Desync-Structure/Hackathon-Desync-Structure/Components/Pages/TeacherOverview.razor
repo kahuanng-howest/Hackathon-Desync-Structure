@@ -1,9 +1,65 @@
-﻿<h3>TeacherOverview</h3>
+﻿@page "/overview"
+@rendermode InteractiveServer
+@using Hackathon_Desync_Structure.Core.Models
+@using Hackathon_Desync_Structure.Core.Services
+@using Hackathon_Desync_Structure.Core.Services.Interfaces
+@inject IMockService _mockService
+@inject CurrentUserService CurrentUser
+@inject NavigationManager Nav
 
+<h3>View all your assignments</h3>
 
-
-
+<div class="row mx-3">
+    @foreach (TaskItem task in teachersTasksModel)
+    {
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">@task.Title</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">@task.Subject</h6>
+                    <p class="card-text">
+                        Start: @task.StartDate.ToString("dd/MM/yyyy")<br />
+                        Deadline: @task?.DueDate.ToString("dd/MM/yyyy")<br />
+                    </p>
+                    @if (!(task.DueDate < DateTime.Today))
+                    {
+                        <span class="text-danger">Deadline verstreken</span>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>
 
 @code {
+    IEnumerable<TaskItem> teachersTasksModel = new List<TaskItem>();
 
+    protected override async Task OnInitializedAsync()
+    {
+        teachersTasksModel = await _mockService.GetTasksFromTeacher(CurrentUser.User!.Id);
+    }
+
+    public string GetStatus(PersonTask task)
+    {
+        if (task.Completed) return "voltooid";
+        else return "niet voltooid";
+    }
+
+    public string GetBadgeClass(PersonTask task)
+    {
+        if (task.Completed) return "bg-primary";
+        else return "bg-danger";
+    }
+
+    public string GetDeadlineMessage(PersonTask task)
+    {
+        if (task.Task.DueDate < DateTime.Today) return "Deadline niet gehaald";
+        else return "";
+    }
+
+    public string IsCheckBoxEnabled(PersonTask task)
+    {
+        if (task.Task.DueDate < DateTime.Today) return "disabled";
+        else return "";
+    }
 }
