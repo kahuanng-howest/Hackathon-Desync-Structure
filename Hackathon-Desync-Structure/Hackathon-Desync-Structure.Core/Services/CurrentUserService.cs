@@ -11,8 +11,10 @@ namespace Hackathon_Desync_Structure.Core.Services
         public bool IsLoggedIn => User != null;
         public bool IsTeacher => User?.Role == "Teacher";
 
-        public void Login(Person person) => User = person;
-        public void Logout() => User = null;
+        public event Action? Changed;
+
+        public void Login(Person person) { User = person; Changed?.Invoke(); }
+        public void Logout() { User = null; Changed?.Invoke(); }
 
     }
 }

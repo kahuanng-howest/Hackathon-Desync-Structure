@@ -1,21 +1,51 @@
-
+@implements IDisposable
+@using Hackathon_Desync_Structure.Core.Services
+@inject CurrentUserService CurrentUser
+@inject NavigationManager Nav
 
 <div class="top-row navbar navbar-dark m-4 rounded-5">
     <div class="container-fluid">
         <a class="navbar-brand" href="">Hackathon-Desync-Structure</a>
 
-        <nav class="nav">
-            <NavLink class="nav-link text-white" href ="" Match="NavLinkMatch.All">
-                Home
-            </NavLink>
+        <nav class="nav align-items-center">
+            @if (CurrentUser.IsLoggedIn)
+            {
+                @if (CurrentUser.IsTeacher)
+                {
+                    <NavLink class="nav-link" href="tasks/add" Match="NavLinkMatch.All">
+                        Add task
+                    </NavLink>
+                }
+                else
+                {
+                    <NavLink class="nav-link" href="overview" Match="NavLinkMatch.All">
+                        Overview
+                    </NavLink>
+                }
 
-            <NavLink class="nav-link" href="overview" Match="NavLinkMatch.All">
-                Overview
-            </NavLink>
-            <NavLink class="nav-link" href="tasks/add" Match="NavLinkMatch.All">
-                Add task
-            </NavLink>
+                <span class="text-white mx-3">@CurrentUser.User!.Name</span>
+                <button class="btn btn-outline-light btn-sm" @onclick="Logout">Uitloggen</button>
+            }
+            else
+            {
+                <NavLink class="nav-link" href="login" Match="NavLinkMatch.All">
+                    Inloggen
+                </NavLink>
+            }
         </nav>
     </div>
 </div>
 
+@code {
+    protected override void OnInitialized() => CurrentUser.Changed += OnChanged;
+
+    private void OnChanged() => InvokeAsync(StateHasChanged);
+
+    private void Logout()
+    {
+        CurrentUser.Logout();
+        Nav.NavigateTo("/login");
+    }
+
+    public void Dispose() => CurrentUser.Changed -= OnChanged;
+}

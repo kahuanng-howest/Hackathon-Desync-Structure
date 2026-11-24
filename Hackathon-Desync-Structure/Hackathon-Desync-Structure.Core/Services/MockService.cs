@@ -11,6 +11,8 @@ public class MockService : IMockService
     private List<Subject> subjects = new();
     private List<Person> persons = new();
     public List<PersonTask> PersonTasks { get { return personTasks; } }
+    private List<TaskItem> teachersTasks = new();
+    public List<TaskItem> TeachersTasks { get { return teachersTasks; } }
 
     private class Root
     {
@@ -84,5 +86,10 @@ public class MockService : IMockService
     public async Task<Person?> GetPersonByName(string name)
     {
         return persons.FirstOrDefault(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+    }
+
+    public async Task<IEnumerable<TaskItem>> GetTasksFromTeacher(int id)
+    {
+        return TeachersTasks.Where(t => t.TeacherId == id);
     }
 }
