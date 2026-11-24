@@ -80,4 +80,9 @@ public class MockService : IMockService
 
         return Task.FromResult(task);
     }
+
+    public async Task<Person?> GetPersonByName(string name)
+    {
+        return persons.FirstOrDefault(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+    }
 }

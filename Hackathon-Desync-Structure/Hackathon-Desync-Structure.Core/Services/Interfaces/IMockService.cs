@@ -6,5 +6,6 @@ namespace Hackathon_Desync_Structure.Core.Services.Interfaces
         Task<IEnumerable<PersonTask>> GetTasksFromPerson(int id);
         Task<IEnumerable<Subject>> GetSubjectsFromTeacher(int teacherId);
         Task<TaskItem> AddTaskAsync(TaskItem task);
+        Task<Person?> GetPersonByName(string name);
     }
 }

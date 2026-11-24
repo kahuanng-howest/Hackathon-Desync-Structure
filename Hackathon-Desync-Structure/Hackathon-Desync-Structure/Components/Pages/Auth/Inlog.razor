@@ -1,11 +1,9 @@
 ﻿@page "/login"
 @rendermode InteractiveServer
-@using Hackathon_Desync_Structure.Core.Models
 @using Hackathon_Desync_Structure.Core.Services.Interfaces
 @inject IMockService _mockService
 @inject CurrentUserService CurrentUser
 @inject NavigationManager Nav
-
 <PageTitle>Inlog</PageTitle>
 <h3>Inlog</h3>
 
@@ -52,6 +50,6 @@
     {
         [System.ComponentModel.DataAnnotations.Required(ErrorMessage = "Naam is verplicht.")]
         public string Name { get; set; } = "";
-        public string Password { get; set; } = ""; // wordt genegeerd (mock)
+        public string Password { get; set; } = "";
     }
 }
