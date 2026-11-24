@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="Hackathon-Desync-Structure.Core/Hackathon-Desync-Structure.Core.csproj" Id="b026ad40-de85-4090-a15c-a631c45f08ee" />
   <Project Path="Hackathon-Desync-Structure/Hackathon-Desync-Structure.csproj" />
 </Solution>
