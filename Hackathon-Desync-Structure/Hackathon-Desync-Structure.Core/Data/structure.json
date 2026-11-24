@@ -1,118 +1,124 @@
 {
-  "opleidingen": [
+  "programmes": [
     {
       "id": 1,
-      "naam": "Graduaat Programmeren"
+      "name": "Associate Degree Programming"
     }
   ],
-  "vakken": [
+  "subjects": [
     {
       "id": 1,
-      "naam": "Databases",
-      "opleidingId": 1
+      "name": "Databases",
+      "programmeId": 1
     },
     {
       "id": 2,
-      "naam": "Webdevelopment",
-      "opleidingId": 1
+      "name": "Web Development",
+      "programmeId": 1
     },
     {
       "id": 3,
-      "naam": "Object Oriented Programming",
-      "opleidingId": 1
+      "name": "Object Oriented Programming",
+      "programmeId": 1
     }
   ],
-  "personen": [
+  "persons": [
     {
       "id": 1,
-      "naam": "Mevr. Peeters",
-      "rol": "Leerkracht",
-      "opleidingId": null,
-      "vakIds": [
+      "name": "Mrs. Peeters",
+      "role": "Teacher",
+      "programmeId": 1,
+      "subjectIds": [
         1,
         3
       ]
     },
     {
       "id": 2,
-      "naam": "Dhr. Janssens",
-      "rol": "Leerkracht",
-      "opleidingId": null,
-      "vakIds": [
+      "name": "Mr. Janssens",
+      "role": "Teacher",
+      "programmeId": 1,
+      "subjectIds": [
         2
       ]
     },
     {
       "id": 3,
-      "naam": "Jan",
-      "rol": "Student",
-      "opleidingId": 1,
-      "vakIds": []
+      "name": "Jan",
+      "role": "Student",
+      "programmeId": 1,
+      "subjectIds": [
+        1, 2, 3
+      ]
     },
     {
       "id": 4,
-      "naam": "Sara",
-      "rol": "Student",
-      "opleidingId": 1,
-      "vakIds": []
+      "name": "Sara",
+      "role": "Student",
+      "programmeId": 1,
+      "subjectIds": [
+        1,
+        2,
+        3
+      ]
     }
   ],
-  "taken": [
+  "tasks": [
     {
       "id": 1,
-      "titel": "ERD tekenen",
-      "startDatum": "2026-11-20",
-      "eindDatum": "2026-12-01",
-      "vakId": 1,
-      "leerkrachtId": 1
+      "title": "Model JSON file",
+      "startDate": "2026-11-20",
+      "dueDate": "2026-12-01",
+      "subjectId": 1,
+      "teacherId": 1
     },
     {
       "id": 2,
-      "titel": "Login mocken",
-      "startDatum": "2026-11-15",
-      "eindDatum": "2026-11-22",
-      "vakId": 2,
-      "leerkrachtId": 2
+      "title": "Create overview page of tasks",
+      "startDate": "2026-11-15",
+      "dueDate": "2026-11-22",
+      "subjectId": 2,
+      "teacherId": 2
     },
     {
       "id": 3,
-      "titel": "Overerving oefening",
-      "startDatum": "2026-11-24",
-      "eindDatum": "2026-12-08",
-      "vakId": 3,
-      "leerkrachtId": 1
+      "title": "Create ",
+      "startDate": "2026-11-24",
+      "dueDate": "2026-12-08",
+      "subjectId": 3,
+      "teacherId": 1
     }
   ],
-  "personenTaken": [
+  "personTasks": [
     {
-      "persoonId": 3,
-      "taakId": 1,
-      "voltooidOp": "2026-11-25T14:30:00"
+      "personId": 3,
+      "taskId": 1,
+      "completed": true
     },
     {
-      "persoonId": 3,
-      "taakId": 2,
-      "voltooidOp": null
+      "personId": 3,
+      "taskId": 2,
+      "completed": false
     },
     {
-      "persoonId": 3,
-      "taakId": 3,
-      "voltooidOp": null
+      "personId": 3,
+      "taskId": 3,
+      "completed": false
     },
     {
-      "persoonId": 4,
-      "taakId": 1,
-      "voltooidOp": null
+      "personId": 4,
+      "taskId": 1,
+      "completed": false
     },
     {
-      "persoonId": 4,
-      "taakId": 2,
-      "voltooidOp": "2026-11-21T09:10:00"
+      "personId": 4,
+      "taskId": 2,
+      "completed": false
     },
     {
-      "persoonId": 4,
-      "taakId": 3,
-      "voltooidOp": null
+      "personId": 4,
+      "taskId": 3,
+      "completed": false
     }
   ]
 }
