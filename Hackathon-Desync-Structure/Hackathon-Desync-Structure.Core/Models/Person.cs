@@ -14,7 +14,7 @@ namespace Hackathon_Desync_Structure.Core.Models
         public int? ProgramId { get; set; }
         public Program? Program { get; set; }
 
-        public List<Subject> Subjects { get; set; } = new(); // many-to-many
+        public List<Subject> Subjects { get; set; } = new();
 
         public List<PersonTask> PersonTasks { get; set; } = new();
     }
