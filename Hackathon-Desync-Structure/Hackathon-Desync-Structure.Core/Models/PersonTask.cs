@@ -12,5 +12,9 @@ namespace Hackathon_Desync_Structure.Core.Models
         public int TaskId { get; set; }
         public TaskItem? Task { get; set; }
         public bool Completed { get; set; }
+        //public TaskState State =>
+        //    Completed ? TaskState.Completed
+        //    : Task!.DueDate < DateTime.Now ? TaskState.Overdue
+        //    : TaskState.Pending;
     }
 }

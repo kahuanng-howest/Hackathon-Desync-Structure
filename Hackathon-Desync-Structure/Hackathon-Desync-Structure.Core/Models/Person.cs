@@ -14,6 +14,8 @@ namespace Hackathon_Desync_Structure.Core.Models
         public int? ProgramId { get; set; }
         public Program? Program { get; set; }
 
+        public List<int> SubjectIds { get; set; } = new();
+
         public List<Subject> Subjects { get; set; } = new();
 
         public List<PersonTask> PersonTasks { get; set; } = new();
