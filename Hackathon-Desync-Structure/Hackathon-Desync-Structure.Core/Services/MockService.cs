@@ -1,16 +1,16 @@
 ﻿using Hackathon_Desync_Structure.Core.Models;
 using Hackathon_Desync_Structure.Core.Services.Interfaces;
-namespace Hackathon_Desync_Structure.Core.Services;
-
 using Microsoft.AspNetCore.Hosting;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
 public class MockService : IMockService
 {
-    public IMockService _mockService;
-    private List<PersonTask> personTasks;
-    public List<PersonTask> PersonTasks { get { return personTasks; } } 
+    private List<PersonTask> personTasks = new();
+    private List<TaskItem> tasks = new();
+    private List<Subject> subjects = new();
+    private List<Person> persons = new();
+    public List<PersonTask> PersonTasks { get { return personTasks; } }
 
     private class Root
     {
@@ -22,31 +22,62 @@ public class MockService : IMockService
 
     public MockService(IWebHostEnvironment env)
     {
-        personTasks = new List<PersonTask>();
         string path = Path.Combine(env.ContentRootPath, "..", "Hackathon-Desync-Structure.Core", "Data", "structure.json");
-        JsonSerializerOptions options = new JsonSerializerOptions
+        var options = new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true,
             Converters = { new JsonStringEnumConverter() }
         };
 
-        // 3. Root inlezen in plaats van List<PersonTask>
         var data = JsonSerializer.Deserialize<Root>(File.ReadAllText(path), options) ?? new Root();
+        subjects = data.Subjects;
+        persons = data.Persons;
+        tasks = data.Tasks;
         personTasks = data.PersonTasks;
 
-        // koppelingen, zodat pt.Task.Title en pt.Person niet null zijn
-        foreach (var t in data.Tasks)
-            t.Subject = data.Subjects.FirstOrDefault(s => s.Id == t.SubjectId);
+        foreach (var t in tasks)
+            t.Subject = subjects.FirstOrDefault(s => s.Id == t.SubjectId);
 
         foreach (var pt in personTasks)
         {
-            pt.Person = data.Persons.FirstOrDefault(p => p.Id == pt.PersonId);
-            pt.Task = data.Tasks.FirstOrDefault(t => t.Id == pt.TaskId);
+            pt.Person = persons.FirstOrDefault(p => p.Id == pt.PersonId);
+            pt.Task = tasks.FirstOrDefault(t => t.Id == pt.TaskId);
         }
     }
 
     public async Task<IEnumerable<PersonTask>> GetTasksFromPerson(int id)
     {
-        return PersonTasks.Where(t => t.PersonId == id).OrderBy(t => t.Completed);
+        return PersonTasks.Where(t => t.PersonId == id);
+    }
+
+    public Task<IEnumerable<Subject>> GetSubjectsFromTeacher(int teacherId)
+    {
+        var teacher = persons.First(p => p.Id == teacherId);
+        return Task.FromResult(subjects.Where(s => teacher.SubjectIds.Contains(s.Id)));
+    }
+
+    public Task<TaskItem> AddTaskAsync(TaskItem task)
+    {
+        var teacher = persons.First(p => p.Id == task.TeacherId);
+        if (!teacher.SubjectIds.Contains(task.SubjectId))
+            throw new InvalidOperationException("Deze leerkracht geeft dit vak niet.");
+
+        var subject = subjects.First(s => s.Id == task.SubjectId);
+
+        task.Id = tasks.Count == 0 ? 1 : tasks.Max(t => t.Id) + 1;
+        task.Subject = subject;
+        task.Teacher = teacher;
+        tasks.Add(task);
+
+        // één rij per student van de opleiding waar het vak bijhoort
+        var students = persons.Where(p => p.Role == "Student" && p.ProgramId == subject.ProgramId);
+        foreach (var student in students)
+        {
+            var pt = new PersonTask { PersonId = student.Id, Person = student, TaskId = task.Id, Task = task };
+            personTasks.Add(pt);
+            task.PersonTasks.Add(pt);
+        }
+
+        return Task.FromResult(task);
     }
 }

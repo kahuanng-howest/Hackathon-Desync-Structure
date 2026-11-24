@@ -4,5 +4,7 @@ namespace Hackathon_Desync_Structure.Core.Services.Interfaces
     public interface IMockService
     {
         Task<IEnumerable<PersonTask>> GetTasksFromPerson(int id);
+        Task<IEnumerable<Subject>> GetSubjectsFromTeacher(int teacherId);
+        Task<TaskItem> AddTaskAsync(TaskItem task);
     }
 }
