@@ -3,6 +3,6 @@ namespace Hackathon_Desync_Structure.Core.Services.Interfaces
 {
     public interface IMockService
     {
-        Task<IEnumerable<TaskItem>> GetTasks();
+        Task<IEnumerable<PersonTask>> GetTasksFromPerson(int id);
     }
 }

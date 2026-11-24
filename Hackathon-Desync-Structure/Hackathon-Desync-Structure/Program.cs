@@ -1,10 +1,15 @@
 using Hackathon_Desync_Structure.Components;
+using Hackathon_Desync_Structure.Core.Services;
+using Hackathon_Desync_Structure.Core.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+builder.Services.AddSingleton<IMockService, MockService>();
+
 
 var app = builder.Build();
 
