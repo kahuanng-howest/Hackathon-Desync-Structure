@@ -7,7 +7,7 @@ namespace Hackathon_Desync_Structure.Core.Models
     public class Subject
     {
         public int Id { get; set; }
-        public string Name { get; set; } = "";
+        public string Name { get; set; }
 
         public int ProgrammeId { get; set; }
         public Program? Programme { get; set; }
