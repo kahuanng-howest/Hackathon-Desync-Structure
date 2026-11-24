@@ -1,27 +1,36 @@
 ﻿@page "/overview"
+@using Hackathon_Desync_Structure.Core.Models
+@using Hackathon_Desync_Structure.Core.Services.Interfaces
+@inject IMockService _mockService
+
 <h3>View all your assignments</h3>
 
 <div class="row mx-3">
-    <div class="mb-3 mb-sm-0">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Special title treatment</h5>
-                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
+    @foreach (PersonTask task in personTasksModel)
+    {
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">@task.Task?.Title</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">@task.Task?.Subject?.Name</h6>
+                    <p class="card-text">
+                        Start: @task.Task?.StartDate.ToString("dd/MM/yyyy")<br />
+                        Deadline: @task.Task?.DueDate.ToString("dd/MM/yyyy")
+                    </p>
+                    @* <span class="badge @GetBadgeClass(task)">@GetStatus(task)</span> *@
+                    
+                </div>
             </div>
         </div>
-    </div>
-    <div class="">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Special title treatment</h5>
-                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
-            </div>
-        </div>
-    </div>
+
+    }
 </div>
 
 @code {
+    IEnumerable<PersonTask> personTasksModel = new List<PersonTask>();
 
+    protected override async Task OnInitializedAsync()
+    {
+        personTasksModel = await _mockService.GetTasksFromPerson(3);
+    }
 }
