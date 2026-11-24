@@ -47,6 +47,6 @@ public class MockService : IMockService
 
     public async Task<IEnumerable<PersonTask>> GetTasksFromPerson(int id)
     {
-        return PersonTasks.Where(t => t.PersonId == id);
+        return PersonTasks.Where(t => t.PersonId == id).OrderBy(t => t.Completed);
     }
 }
