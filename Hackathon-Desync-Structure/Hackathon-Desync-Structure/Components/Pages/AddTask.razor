@@ -1,0 +1,65 @@
+﻿@page "/tasks/add"
+@rendermode InteractiveServer
+@using Hackathon_Desync_Structure.Core.Models
+@using Hackathon_Desync_Structure.Core.Models.FormModels.Hackathon_Desync_Structure.Core.Models.FormModels
+@using Hackathon_Desync_Structure.Core.Services.Interfaces
+@inject IMockService _mockService
+@inject NavigationManager Nav
+
+<PageTitle>Taak toevoegen</PageTitle>
+<h3>Taak toevoegen</h3>
+
+<EditForm Model="form" OnValidSubmit="SaveAsync" class="mx-3">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-3">
+        <label class="form-label">Vak</label>
+        <InputSelect class="form-select" @bind-Value="form.SubjectId">
+            <option value="0">-- kies een vak --</option>
+            @foreach (var s in subjects)
+            {
+                <option value="@s.Id">@s.Name</option>
+            }
+        </InputSelect>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Titel</label>
+        <InputText class="form-control" @bind-Value="form.Title" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Startdatum</label>
+        <InputDate class="form-control" @bind-Value="form.StartDate" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Deadline</label>
+        <InputDate class="form-control" @bind-Value="form.DueDate" />
+    </div>
+
+    <button type="submit" class="btn btn-primary" disabled="@busy">Toevoegen</button>
+</EditForm>
+
+<p><a href="overview">Terug naar overzicht</a></p>
+
+@code {
+    [Parameter]
+    public int TeacherId { get; set; } = 1;
+    private TaskFormModel form = new();
+    private IEnumerable<Subject> subjects = new List<Subject>();
+    private bool busy;
+
+    protected override async Task OnInitializedAsync()
+    {
+        subjects = await _mockService.GetSubjectsFromTeacher(TeacherId);
+    }
+
+    private async Task SaveAsync()
+    {
+        busy = true;
+        await _mockService.AddTaskAsync(form.ToEntity(TeacherId));
+        Nav.NavigateTo("/overview");
+    }
+}
