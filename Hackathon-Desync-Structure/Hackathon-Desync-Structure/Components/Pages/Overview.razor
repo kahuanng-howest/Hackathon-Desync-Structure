@@ -17,20 +17,41 @@
                         Start: @task.Task?.StartDate.ToString("dd/MM/yyyy")<br />
                         Deadline: @task.Task?.DueDate.ToString("dd/MM/yyyy")
                     </p>
-                    @* <span class="badge @GetBadgeClass(task)">@GetStatus(task)</span> *@
-                    
+                    <span class="badge @GetBadgeClass(task)">@GetStatus(task)</span>
+                    <div class="form-check mt-2">
+                        <input class="form-check-input"
+                        type="checkbox"
+                        @bind="task.Completed" />
+
+
+
+                    </div>
                 </div>
             </div>
         </div>
-
     }
 </div>
 
-@code {
-    IEnumerable<PersonTask> personTasksModel = new List<PersonTask>();
+        @code {
+        IEnumerable<PersonTask> personTasksModel = new List<PersonTask>();
 
-    protected override async Task OnInitializedAsync()
-    {
-        personTasksModel = await _mockService.GetTasksFromPerson(3);
+        protected override async Task OnInitializedAsync()
+        {
+            personTasksModel = await _mockService.GetTasksFromPerson(3);
+        }
+
+        public string GetStatus(PersonTask task)
+        {
+            if (task.Completed) return "voltooid";
+            else return "niet voltooid";
+        }
+
+        public string GetBadgeClass(PersonTask task)
+        {
+            if (task.Completed) return "bg-primary";
+        else return "bg-danger";
+        }
+
+        
     }
-}
+    }
