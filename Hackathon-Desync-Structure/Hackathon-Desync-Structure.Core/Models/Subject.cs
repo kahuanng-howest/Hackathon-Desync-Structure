@@ -9,10 +9,10 @@ namespace Hackathon_Desync_Structure.Core.Models
         public int Id { get; set; }
         public string Name { get; set; }
 
-        public int ProgrammeId { get; set; }
-        public Program? Programme { get; set; }
+        public int ProgramId { get; set; }
+        public Program? Program { get; set; }
 
-        public List<Person> Teachers { get; set; } = new(); // many-to-many
+        public List<Person> Teachers { get; set; } = new();
         public List<TaskItem> Tasks { get; set; } = new();
 
     }

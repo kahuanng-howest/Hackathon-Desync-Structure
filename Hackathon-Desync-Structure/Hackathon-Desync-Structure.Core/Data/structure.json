@@ -1,5 +1,5 @@
 {
-  "programmes": [
+  "programs": [
     {
       "id": 1,
       "name": "Associate Degree Programming"
@@ -105,7 +105,7 @@
     {
       "personId": 3,
       "taskId": 3,
-      "completed": false
+      "completed": true
     },
     {
       "personId": 4,
@@ -120,7 +120,7 @@
     {
       "personId": 4,
       "taskId": 3,
-      "completed": false
+      "completed": true
     }
   ]
 }
