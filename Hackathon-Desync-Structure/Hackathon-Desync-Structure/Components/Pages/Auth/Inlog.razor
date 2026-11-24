@@ -1,0 +1,57 @@
+﻿@page "/login"
+@rendermode InteractiveServer
+@using Hackathon_Desync_Structure.Core.Models
+@using Hackathon_Desync_Structure.Core.Services.Interfaces
+@inject IMockService _mockService
+@inject CurrentUserService CurrentUser
+@inject NavigationManager Nav
+
+<PageTitle>Inlog</PageTitle>
+<h3>Inlog</h3>
+
+<EditForm Model="form" OnValidSubmit="LoginAsync" class="mx-3" style="max-width: 400px;">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-3">
+        <label class="form-label">Naam</label>
+        <InputText class="form-control" @bind-Value="form.Name" placeholder="bv. Jan" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Wachtwoord</label>
+        <InputText type="password" class="form-control" @bind-Value="form.Password" />
+    </div>
+
+    @if (error != null)
+    {
+        <div class="alert alert-danger">@error</div>
+    }
+
+    <button type="submit" class="btn btn-primary">Inloggen</button>
+</EditForm>
+
+@code {
+    private LoginModel form = new();
+    private string? error;
+
+    private async Task LoginAsync()
+    {
+        var person = await _mockService.GetPersonByName(form.Name);
+        if (person == null)
+        {
+            error = "Gebruiker niet gevonden.";
+            return;
+        }
+
+        CurrentUser.Login(person);
+        Nav.NavigateTo(person.Role == "Teacher" ? "/tasks/add" : "/overview");
+    }
+
+    private class LoginModel
+    {
+        [System.ComponentModel.DataAnnotations.Required(ErrorMessage = "Naam is verplicht.")]
+        public string Name { get; set; } = "";
+        public string Password { get; set; } = ""; // wordt genegeerd (mock)
+    }
+}
