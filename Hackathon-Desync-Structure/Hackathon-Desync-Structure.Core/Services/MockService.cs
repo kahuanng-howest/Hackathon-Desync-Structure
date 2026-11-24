@@ -90,6 +90,7 @@ public class MockService : IMockService
 
     public async Task<IEnumerable<TaskItem>> GetTasksFromTeacher(int id)
     {
-        return TeachersTasks.Where(t => t.TeacherId == id);
+        teachersTasks = tasks.Where(t => t.TeacherId == id).ToList();
+        return TeachersTasks;
     }
 }

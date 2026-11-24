@@ -2,8 +2,10 @@
 @rendermode InteractiveServer
 @using Hackathon_Desync_Structure.Core.Models
 @using Hackathon_Desync_Structure.Core.Models.FormModels.Hackathon_Desync_Structure.Core.Models.FormModels
+@using Hackathon_Desync_Structure.Core.Services
 @using Hackathon_Desync_Structure.Core.Services.Interfaces
 @inject IMockService _mockService
+@inject CurrentUserService CurrentUser
 @inject NavigationManager Nav
 
 <PageTitle>Taak toevoegen</PageTitle>
@@ -44,22 +46,26 @@
 
 <p><a href="overview">Terug naar overzicht</a></p>
 
+
 @code {
-    [Parameter]
-    public int TeacherId { get; set; } = 1;
     private TaskFormModel form = new();
     private IEnumerable<Subject> subjects = new List<Subject>();
     private bool busy;
 
     protected override async Task OnInitializedAsync()
     {
-        subjects = await _mockService.GetSubjectsFromTeacher(TeacherId);
+        if (!CurrentUser.IsLoggedIn)
+        {
+            Nav.NavigateTo("/login");
+            return;
+        }
+        subjects = await _mockService.GetSubjectsFromTeacher(CurrentUser.User!.Id);
     }
 
     private async Task SaveAsync()
     {
         busy = true;
-        await _mockService.AddTaskAsync(form.ToEntity(TeacherId));
-        Nav.NavigateTo("/overview");
+        await _mockService.AddTaskAsync(form.ToEntity(CurrentUser.User!.Id));
+        Nav.NavigateTo("/overview/teacher");
     }
 }

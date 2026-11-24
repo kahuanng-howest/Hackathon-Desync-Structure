@@ -1,4 +1,4 @@
-﻿@page "/overview"
+﻿@page "/overview/teacher"
 @rendermode InteractiveServer
 @using Hackathon_Desync_Structure.Core.Models
 @using Hackathon_Desync_Structure.Core.Services
@@ -16,12 +16,12 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">@task.Title</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">@task.Subject</h6>
+                    <h6 class="card-subtitle mb-2 text-muted">@task.Subject.Name</h6>
                     <p class="card-text">
                         Start: @task.StartDate.ToString("dd/MM/yyyy")<br />
                         Deadline: @task?.DueDate.ToString("dd/MM/yyyy")<br />
                     </p>
-                    @if (!(task.DueDate < DateTime.Today))
+                    @if ((task.DueDate < DateTime.Today))
                     {
                         <span class="text-danger">Deadline verstreken</span>
                     }
@@ -36,7 +36,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        teachersTasksModel = await _mockService.GetTasksFromTeacher(CurrentUser.User!.Id);
+        teachersTasksModel = await _mockService.GetTasksFromTeacher(CurrentUser.User.Id);
     }
 
     public string GetStatus(PersonTask task)
