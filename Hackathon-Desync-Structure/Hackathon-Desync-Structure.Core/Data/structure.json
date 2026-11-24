@@ -95,7 +95,7 @@
     {
       "personId": 3,
       "taskId": 1,
-      "completed": true
+      "completed": false
     },
     {
       "personId": 3,
@@ -105,7 +105,7 @@
     {
       "personId": 3,
       "taskId": 3,
-      "completed": true
+      "completed": false
     },
     {
       "personId": 4,

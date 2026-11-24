@@ -19,7 +19,7 @@
                     <h6 class="card-subtitle mb-2 text-muted">@task.Task?.Subject?.Name</h6>
                     <p class="card-text">
                         Start: @task.Task?.StartDate.ToString("dd/MM/yyyy")<br />
-                        Deadline: @task.Task?.DueDate.ToString("dd/MM/yyyy")<br/>
+                        Deadline: @task.Task?.DueDate.ToString("dd/MM/yyyy")<br />
                         <span class="text-danger">@GetDeadlineMessage(task)</span>
                     </p>
                     @if (!(task.Task.DueDate < DateTime.Today))
@@ -42,23 +42,32 @@
 @code {
     IEnumerable<PersonTask> personTasksModel = new List<PersonTask>();
 
-        protected override async Task OnInitializedAsync()
-        {
-            personTasksModel = await _mockService.GetTasksFromPerson(3);
-        }
+    protected override async Task OnInitializedAsync()
+    {
+        personTasksModel = await _mockService.GetTasksFromPerson(CurrentUser.User!.Id);
+    }
 
-        public string GetStatus(PersonTask task)
-        {
-            if (task.Completed) return "voltooid";
-            else return "niet voltooid";
-        }
+    public string GetStatus(PersonTask task)
+    {
+        if (task.Completed) return "voltooid";
+        else return "niet voltooid";
+    }
 
-        public string GetBadgeClass(PersonTask task)
-        {
-            if (task.Completed) return "bg-primary";
+    public string GetBadgeClass(PersonTask task)
+    {
+        if (task.Completed) return "bg-primary";
         else return "bg-danger";
-        }
+    }
 
-        
+    public string GetDeadlineMessage(PersonTask task)
+    {
+        if (task.Task.DueDate < DateTime.Today) return "Deadline niet gehaald";
+        else return "";
     }
+
+    public string IsCheckBoxEnabled(PersonTask task)
+    {
+        if (task.Task.DueDate < DateTime.Today) return "disabled";
+        else return "";
     }
+}
