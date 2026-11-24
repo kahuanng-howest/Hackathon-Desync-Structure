@@ -9,7 +9,7 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
 builder.Services.AddSingleton<IMockService, MockService>();
-
+builder.Services.AddScoped<CurrentUserService>();
 
 var app = builder.Build();
 
