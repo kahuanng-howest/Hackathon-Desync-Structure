@@ -10,30 +10,8 @@
         <nav class="nav align-items-center">
             @if (CurrentUser.IsLoggedIn)
             {
-                @if (CurrentUser.IsTeacher)
-                {
-                    <NavLink class="nav-link" href="tasks/add" Match="NavLinkMatch.All">
-                        Add task
-                    </NavLink>
-                    <NavLink class="nav-link" href="overview/teacher" Match="NavLinkMatch.All">
-                        Add task
-                    </NavLink>
-                }
-                else
-                {
-                    <NavLink class="nav-link" href="overview" Match="NavLinkMatch.All">
-                        Overview
-                    </NavLink>
-                }
-
                 <span class="text-white mx-3">@CurrentUser.User!.Name</span>
                 <button class="btn btn-outline-light btn-sm" @onclick="Logout">Uitloggen</button>
-            }
-            else
-            {
-                <NavLink class="nav-link" href="login" Match="NavLinkMatch.All">
-                    Inloggen
-                </NavLink>
             }
         </nav>
     </div>

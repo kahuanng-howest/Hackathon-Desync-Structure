@@ -44,13 +44,14 @@
     <button type="submit" class="btn btn-primary" disabled="@busy">Toevoegen</button>
 </EditForm>
 
-<p><a href="overview">Terug naar overzicht</a></p>
-
+<p><a href="@OverviewUrl">Terug naar overzicht</a></p>
 
 @code {
     private TaskFormModel form = new();
     private IEnumerable<Subject> subjects = new List<Subject>();
     private bool busy;
+
+    private string OverviewUrl => CurrentUser.IsTeacher ? "/overview/teacher" : "/overview";
 
     protected override async Task OnInitializedAsync()
     {
@@ -59,6 +60,13 @@
             Nav.NavigateTo("/login");
             return;
         }
+
+        if (!CurrentUser.IsTeacher)
+        {
+            Nav.NavigateTo("/overview");
+            return;
+        }
+
         subjects = await _mockService.GetSubjectsFromTeacher(CurrentUser.User!.Id);
     }
 
@@ -66,6 +74,6 @@
     {
         busy = true;
         await _mockService.AddTaskAsync(form.ToEntity(CurrentUser.User!.Id));
-        Nav.NavigateTo("/overview/teacher");
+        Nav.NavigateTo(OverviewUrl);
     }
 }

@@ -7,7 +7,10 @@
 @inject CurrentUserService CurrentUser
 @inject NavigationManager Nav
 
-<h3>View all your assignments</h3>
+<div class="d-flex justify-content-between align-items-center mx-3 mb-3">
+    <h3 class="mb-0">View all your assignments</h3>
+    <a href="tasks/add" class="btn btn-primary">+ Taak toevoegen</a>
+</div>
 
 <div class="row mx-3">
     @foreach (TaskItem task in teachersTasksModel)
@@ -16,12 +19,12 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">@task.Title</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">@task.Subject.Name</h6>
+                    <h6 class="card-subtitle mb-2 text-muted">@task.Subject?.Name</h6>
                     <p class="card-text">
                         Start: @task.StartDate.ToString("dd/MM/yyyy")<br />
-                        Deadline: @task?.DueDate.ToString("dd/MM/yyyy")<br />
+                        Deadline: @task.DueDate.ToString("dd/MM/yyyy")
                     </p>
-                    @if ((task.DueDate < DateTime.Today))
+                    @if (task.DueDate < DateTime.Today)
                     {
                         <span class="text-danger">Deadline verstreken</span>
                     }
@@ -36,30 +39,12 @@
 
     protected override async Task OnInitializedAsync()
     {
-        teachersTasksModel = await _mockService.GetTasksFromTeacher(CurrentUser.User.Id);
-    }
+        if (!CurrentUser.IsLoggedIn)
+        {
+            Nav.NavigateTo("/login");
+            return;
+        }
 
-    public string GetStatus(PersonTask task)
-    {
-        if (task.Completed) return "voltooid";
-        else return "niet voltooid";
-    }
-
-    public string GetBadgeClass(PersonTask task)
-    {
-        if (task.Completed) return "bg-primary";
-        else return "bg-danger";
-    }
-
-    public string GetDeadlineMessage(PersonTask task)
-    {
-        if (task.Task.DueDate < DateTime.Today) return "Deadline niet gehaald";
-        else return "";
-    }
-
-    public string IsCheckBoxEnabled(PersonTask task)
-    {
-        if (task.Task.DueDate < DateTime.Today) return "disabled";
-        else return "";
+        teachersTasksModel = await _mockService.GetTasksFromTeacher(CurrentUser.User!.Id);
     }
 }

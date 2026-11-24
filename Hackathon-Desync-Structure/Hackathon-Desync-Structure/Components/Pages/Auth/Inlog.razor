@@ -44,7 +44,7 @@
         }
 
         CurrentUser.Login(person);
-        Nav.NavigateTo(person.Role == "Teacher" ? "/tasks/add" : "/overview");
+        Nav.NavigateTo(person.Role == "Teacher" ? "/overview/teacher" : "/overview");
     }
 
     private class LoginModel
