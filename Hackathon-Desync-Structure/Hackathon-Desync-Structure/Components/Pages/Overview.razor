@@ -7,10 +7,25 @@
 @inject CurrentUserService CurrentUser
 @inject NavigationManager Nav
 
-<h3>View all your assignments</h3>
+
+<div class="mb-3 w-25">
+    <div>
+        <h3>View all your assignments</h3>
+    </div>
+
+    <div>
+        <label class="form-label">Filter op status</label>
+        <select class="form-select" @bind="selectedFilter">
+            <option value="Alles">Alles</option>
+            <option value="Voltooid">Voltooid</option>
+            <option value="Onvoltooid">Onvoltooid</option>
+        </select>
+    </div>
+   
+</div>
 
 <div class="row mx-3">
-    @foreach (PersonTask task in personTasksModel)
+    @foreach (PersonTask task in FilteredTasks)
     {
         <div class="col-md-4 mb-3">
             <div class="card">
@@ -41,11 +56,21 @@
 
 @code {
     IEnumerable<PersonTask> personTasksModel = new List<PersonTask>();
-
+    private string selectedFilter = "Alles";
     protected override async Task OnInitializedAsync()
     {
         personTasksModel = await _mockService.GetTasksFromPerson(CurrentUser.User!.Id);
     }
+
+    
+
+    private IEnumerable<PersonTask> FilteredTasks =>
+        selectedFilter switch
+        {
+            "Voltooid" => personTasksModel.Where(t => t.Completed),
+            "Niet voltooid" => personTasksModel.Where(t => !t.Completed),
+            _ => personTasksModel
+        };
 
     public string GetStatus(PersonTask task)
     {
